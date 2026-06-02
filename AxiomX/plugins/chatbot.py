@@ -7,6 +7,10 @@ import AxiomX
 from AxiomX.helpers.decorator import protected_ids
 from AxiomX.db.chatbot import add_chat, remove_chat, CHAT_IDS
 import config
+from AxiomX.helpers.mongo import db
+
+chat_memory = db["chat_memory"]
+user_memory = db["user_memory"]
 
 __module__ = "𝐂ʜᴀᴛ-𝐁ᴏᴛ🤖"
 __help__ = """
@@ -202,7 +206,283 @@ NEVER:
 
 GOAL:
 Feel like a real smart friend + manager.
+
+MEMORY RULES:
+
+- You have access to chat history.
+- Use previous messages naturally.
+- Remember what user said earlier.
+- Keep conversation continuity.
+
+- If user already told something earlier,
+  do not act like you forgot.
+
+Example:
+
+User:
+"My name is Aniket"
+
+Later:
+
+User:
+"What is my name?"
+
+Reply:
+"Aniket 😌"
+
+NOT:
+"I don't know."
+
+--------------------------------
+
+OWNER INFORMATION:
+
+Owner Name:
+Maanav Tiwari
+
+Known facts:
+
+- Creator of Axiom Manager.
+- Developer and coder.
+- Lives in Deoria, Uttar Pradesh, India.
+- Male.
+- Speaks Hinglish.
+- Respectful tone required.
+
+IMPORTANT:
+
+When owner asks:
+
+"me kon hu"
+→ Reply naturally:
+
+"Aap mere creator hain 😌"
+
+OR
+
+"Aap Maanav hain 😌"
+
+OR
+
+"Aap hi to mujhe banane wale hain."
+
+Do NOT reveal UID.
+
+Do NOT say:
+"team member"
+"team owner"
+"system owner"
+
+Never invent new facts.
+
+Only use facts already known.
+
+--------------------------------
+
+OWNER SPEAKING STYLE:
+
+For owner always use:
+
+- Aap
+- Aapka
+- Chaliye
+- Boliye
+- Ji
+
+Never use:
+
+- tu
+- be
+- oye
+- bhai
+
+unless owner himself jokingly uses them repeatedly.
+
+--------------------------------
+
+NORMAL USERS:
+
+Mirror user's tone.
+
+If user says:
+"Aap"
+
+Use:
+"Aap"
+
+If user says:
+"Tum"
+
+Use:
+"Tum"
+
+If user says:
+"Tu"
+
+Use:
+"Tu"
+
+Do not force one style.
+
+--------------------------------
+
+CONVERSATION RULES:
+
+Never reset personality.
+
+Never suddenly change mood.
+
+Stay consistent.
+
+If conversation is funny,
+stay funny.
+
+If conversation is serious,
+stay serious.
+
+If conversation is emotional,
+stay calm and supportive.
+
+Remember what topic is currently being discussed.
+
+Do not answer every message as a new conversation.
 """
+
+async def save_chat(user_id, role, text):
+    await chat_memory.update_one(
+        {"_id": user_id},
+        {
+            "$push": {
+                "messages": {
+                    "role": role,
+                    "content": text
+                }
+            }
+        },
+        upsert=True
+    )
+
+
+async def get_history(user_id):
+    data = await chat_memory.find_one({"_id": user_id})
+
+    if not data:
+        return []
+
+    messages = data.get("messages", [])
+
+    # last 50 messages only
+    return messages[-90:]
+
+async def save_user_memory(user_id, memory):
+    await user_memory.update_one(
+        {"_id": user_id},
+        {"$set": {"memory": memory}},
+        upsert=True
+    )
+
+
+async def get_user_memory(user_id):
+    data = await user_memory.find_one({"_id": user_id})
+
+    if not data:
+        return ""
+
+    return data.get("memory", "")
+
+async def extract_memory(user_id, text):
+    try:
+        headers = {
+            "Authorization": f"Bearer {config.GROQ_API_KEY}"
+        }
+
+        data = {
+            "model": "llama-3.3-70b-versatile",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": """
+Extract only important long-term facts.
+
+Rules:
+- Keep only permanent or semi-permanent facts.
+- Ignore greetings.
+- Ignore random chatting.
+- Ignore temporary emotions.
+- Ignore jokes.
+
+Examples:
+
+User:
+My name is Aniket and I live in Deoria.
+
+Output:
+Name: Aniket
+Lives in: Deoria
+
+User:
+Hello bro
+
+Output:
+NONE
+
+Return ONLY facts.
+"""
+                },
+                {
+                    "role": "user",
+                    "content": text
+                }
+            ]
+        }
+
+        async with AxiomX.aiohttpsession.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers=headers,
+            json=data
+        ) as resp:
+
+            if resp.status != 200:
+                return
+
+            result = await resp.json()
+
+            memory = (
+                result["choices"][0]
+                ["message"]["content"]
+                .strip()
+            )
+
+            if memory.upper() == "NONE":
+                return
+
+            old_memory = await get_user_memory(user_id)
+            
+            OWNER_ID = 7169279112
+            
+            # Owner ke baare me koi aur kuch bole to ignore
+            if user_id != OWNER_ID:
+                blocked_words = [
+                    "maanav",
+                    "maanav tiwari",
+                    "creator",
+                    "owner",
+                    "axiom manager",
+                    "developer"
+                ]
+            
+                if any(word in memory.lower() for word in blocked_words):
+                    return
+            
+            if memory and memory not in old_memory:
+                await save_user_memory(
+                    user_id,
+                    old_memory + "\n" + memory
+                )
+
+    except Exception as e:
+        print("Memory Error:", e)
+
 
 async def get_chatbot_reply(text: str, user_id=None):
     if AxiomX.aiohttpsession is None:
@@ -217,18 +497,28 @@ async def get_chatbot_reply(text: str, user_id=None):
     else:
         content += "\nCURRENT USER IS NORMAL USER. Use NORMAL USER style."
     
+    history = await get_history(user_id)
+    memory = await get_user_memory(user_id)
+
+    messages = [
+        {
+            "role": "system",
+            "content": content + f"\n\nKNOWN FACTS ABOUT USER:\n{memory}"
+        }
+    ]
+
+    messages.extend(history)
+
+    messages.append(
+        {
+            "role": "user",
+            "content": text
+        }
+    )
+
     data = {
         "model": "llama-3.3-70b-versatile",
-        "messages": [
-            {
-                "role": "system",
-                "content": content
-            },
-            {
-                "role": "user",
-                "content": text
-            }
-        ]
+        "messages": messages
     }
 
     try:
@@ -238,7 +528,12 @@ async def get_chatbot_reply(text: str, user_id=None):
                 choices = res_json.get("choices")
             
                 if choices:
-                    return choices[0].get("message", {}).get("content")
+                    reply = choices[0]["message"]["content"]
+                
+                    await save_chat(user_id, "user", text)
+                    await save_chat(user_id, "assistant", reply)
+                
+                    return reply
     except Exception as e:
         print(f"Chatbot AI Error: {e}")
     return None
@@ -268,8 +563,16 @@ async def chatbot_handler(_, message: Message):
             return
 
     input_text = message.text or message.caption
+    
     if not input_text:
         return
+    
+    asyncio.create_task(
+        extract_memory(
+            message.from_user.id,
+            input_text
+        )
+    )
 
     # Remove bot mention from text if present
     if f"@{pbot.me.username}" in input_text:
