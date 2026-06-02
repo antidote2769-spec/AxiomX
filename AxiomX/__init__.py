@@ -1,5 +1,6 @@
 import pyrogram 
 from pyrogram import Client, idle
+from pyrogram.errors import FloodWait
 #from pytgcalls import PyTgCalls
 from telegram.ext import Defaults, ApplicationBuilder, Application, PicklePersistence
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -49,7 +50,7 @@ async def send_restart(application: Application) -> None:
         await application.bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text="𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ Sυᴄᴄєssғυʟʟʏ 🚀"
+            text="<b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ Sυᴄᴄєssғυʟʟʏ 🚀</b>"
         )
         os.remove("restart_data.txt")  
     except FileNotFoundError:
@@ -60,7 +61,7 @@ async def send_restart(application: Application) -> None:
         if LOGS_CHANNEL:
             await application.bot.send_message(
                 chat_id=LOGS_CHANNEL,
-                text=f"<b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐣‌υsᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ ⏱️</b>\n\n<b>𝐓‌ɪᴍє:</b> <code>{time.ctime()}</code>",
+                text=f"<blockquote><b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐣‌υsᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ ⏱️</b></blockquote>\n\n<blockquote><b>𝐓‌ɪᴍє:</b> <code>{time.ctime()}</code></blockquote>",
                 parse_mode=constants.ParseMode.HTML
             )
     except Exception as e:
@@ -96,7 +97,19 @@ multi_clients[0] = pbot
 work_loads[0] = 0
 
 async def start_all_clients():
+    for pbot in CLIENTS:
+        try:
+            await pbot.start()
+        except FloodWait as e:
+            print(f"[ERROR] Telegram FLOOD_WAIT: {e.x} seconds. Exiting gracefully.")
+            return  # Exit without crashing
+        except Exception as e:
+            print(f"[ERROR] Failed to start bot: {e}")
+            return
+               
+async def start_all_clients():
     await pbot.start()
+       
     LOGGER.info("Pyrogram Bot Started!")
     
     try:
