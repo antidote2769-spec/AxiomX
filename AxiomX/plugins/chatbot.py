@@ -549,11 +549,16 @@ Return NONE
             headers=headers,
             json=data
         ) as resp:
-
+        
             if resp.status != 200:
+                print(f"API Error: {resp.status}")
                 return
-
-            result = await resp.json()
+        
+            try:
+                result = await resp.json()
+            except Exception as e:
+                print(f"JSON Parse Error: {e}")
+                return
 
             memory = (
                 result["choices"][0]
@@ -672,11 +677,18 @@ async def get_chatbot_reply(text: str, user_id=None):
     try:
         async with AxiomX.aiohttpsession.post(api_url, headers=headers, json=data) as response:
             if response.status == 200:
-                res_json = await response.json()
-                choices = res_json.get("choices")
-            
-                if choices:
-                    reply = choices[0]["message"]["content"]
+                try:
+                    res_json = await response.json()
+                    choices = res_json.get("choices")
+                
+                    if choices:
+                        reply = choices[0]["message"]["content"]
+                except Exception as e:
+                    print(f"Chatbot JSON Error: {e}")
+                    return None
+            else:
+                print(f"Chatbot API Error: {response.status}")
+                return None
                 
                     await save_chat(user_id, "user", text)
                     await save_chat(user_id, "assistant", reply)
