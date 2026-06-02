@@ -108,9 +108,14 @@ async def start_all_clients():
             return
                
 async def start_all_clients():
-    await pbot.start()
-       
-    LOGGER.info("Pyrogram Bot Started!")
+    try:
+        await pbot.start()
+        LOGGER.info("Pyrogram Bot Started!")
+    except FloodWait as e:
+        LOGGER.warning(f"FloodWait: Waiting {e.x} seconds...")
+        await asyncio.sleep(e.x)
+        await pbot.start()
+        LOGGER.info("Pyrogram Bot Started after FloodWait!")
     
     try:
         await user.start()
@@ -121,13 +126,8 @@ async def start_all_clients():
     await tbot.start(bot_token=TOKEN)
     LOGGER.info("Telethon Bot Started!")
     
-    #try:
-    #    await pytgcalls.start()
-    #    LOGGER.info("PyTgCalls Started!")
-    #except Exception as e:
-    #    LOGGER.error(f'❌ ERROR when starting PyTgCalls: {e}')
-    
     LOGGER.info("All Clients Started!")
+       
 
 async def stop_all_clients():
     await pbot.stop()
