@@ -49,31 +49,31 @@ whitelist_cache = TTLCache(maxsize=1, ttl=2)
 
 async def get_status_text(user_id: int) -> str:
     if user_id == config.OWNER_ID:
-        return "👑 Owner"
+        return "👑 𝐎‌ᴡηєꝛ"
     
     if hasattr(config, "DEV_LIST") and user_id in config.DEV_LIST:
-        return "👨‍💻 Developer ⭐"
+        return "👨‍💻 𝐃‌єᴠєʟσᴘєꝛ  ⭐"
     
     if 'sudo' not in sudo_cache:
         db_sudo_users = await get_all_sudo_users()
         config_sudo_users = getattr(config, "SUDO_USERS", [])
         sudo_cache['sudo'] = set(db_sudo_users) | set(config_sudo_users)
     if user_id in sudo_cache['sudo']:
-        return "⚡ Sudo User"
+        return "⚡ 𝐒‌υᴅσ 𝐔‌sєꝛ"
     
     if 'support' not in support_cache:
         db_support_users = await get_all_support_users()
         config_support_users = getattr(config, "SUPPORT_USERS", [])
         support_cache['support'] = set(db_support_users) | set(config_support_users)
     if user_id in support_cache['support']:
-        return "🆘 Support User"
+        return "🆘 𝐒‌υᴘᴘσꝛᴛ 𝐔‌sєꝛ"
     
     if 'whitelist' not in whitelist_cache:
         db_whitelist_users = await get_all_whitelist_users()
         config_whitelist_users = getattr(config, "WHITELIST_USERS", [])
         whitelist_cache['whitelist'] = set(db_whitelist_users) | set(config_whitelist_users)
     if user_id in whitelist_cache['whitelist']:
-        return "✅ Whitelisted"
+        return "✅ 𝐖‌ʜɪᴛєʟɪsᴛєᴅ"
     
     return ""
 
@@ -149,13 +149,13 @@ async def get_photo_bytes(bot, photo_id: str) -> Optional[bytes]:
     return None
 
 def build_chat_info_text(chat: Chat) -> str:
-    chat_type = "Chat"
+    chat_type = "𝐂‌ʜᴧᴛ"
     if chat.type == constants.ChatType.CHANNEL:
-        chat_type = "Channel"
+        chat_type = "𝐂‌ʜᴧηηєʟ"
     elif chat.type == constants.ChatType.GROUP:
-        chat_type = "Group"
+        chat_type = "𝐆‌ꝛσυᴘ"
     elif chat.type == constants.ChatType.SUPERGROUP:
-        chat_type = "Supergroup"
+        chat_type = "𝐒‌υᴘєꝛɢꝛσυᴘ"
     
     title = getattr(chat, 'title', 'Unknown')
     username = getattr(chat, 'username', None)
@@ -163,35 +163,35 @@ def build_chat_info_text(chat: Chat) -> str:
     description = getattr(chat, 'description', None)
     
     text = (
-        f"<b>🔍 Showing {chat_type}'s Profile Info 📋</b>\n"
-        "<b>━━━━━━━━━━━━━━━━</b>\n"
-        f"<b>Chat Title:</b> <b>{safe_escape(title)}</b>\n"
+        f"<b>🔍 Sʜσᴡɪηɢ {chat_type}'s 𝐏‌ꝛσғɪʟє 𝐈‌ηғσ 📋</b>\n"
+        "<b>•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•</b>\n"
+        f"<b>❖ 𝐂‌ʜᴧᴛ 𝐓‌ɪᴛʟє:</b> <b>{safe_escape(title)}</b>\n"
     )
     
     if username:
-        text += f"<b>Username:</b> @{username}\n"
+        text += f"<b>❖ 𝐔‌sєꝛηᴧᴍє:</b> @{username}\n"
     
-    text += f"<b>Chat ID:</b> <code>{chat.id}</code>\n"
+    text += f"<b>❖ 𝐂‌ʜᴧᴛ 𝐈‌𝐃‌:</b> <code>{chat.id}</code>\n"
     
     if chat.type == constants.ChatType.SUPERGROUP:
-        text += f"<b>Chat Type:</b> <b>Supergroup</b>\n"
+        text += f"<b>❖ 𝐂‌ʜᴧᴛ 𝐓‌ʏᴘє :</b> <b>𝐒‌υᴘєꝛɢꝛσυᴘ</b>\n"
     elif chat.type == constants.ChatType.GROUP:
-        text += f"<b>Chat Type:</b> <b>Group</b>\n"
+        text += f"<b>❖ 𝐂‌ʜᴧᴛ 𝐓‌ʏᴘє :</b> <b>𝐆‌ꝛσυᴘ</b>\n"
     elif chat.type == constants.ChatType.CHANNEL:
-        text += f"<b>Chat Type:</b> <b>Channel</b>\n"
+        text += f"<b>❖ 𝐂‌ʜᴧᴛ 𝐓‌ʏᴘє :</b> <b>𝐂‌ʜᴧηηєʟ</b>\n"
     
     if member_count:
-        text += f"<b>Total Members:</b> <b>{member_count}</b>\n"
+        text += f"<b>❖ 𝐓‌σᴛᴧʟ 𝐌‌єϻʙєꝛs:</b> <b>{member_count}</b>\n"
     
     if description:
-        text += f"<b>Description:</b> <code>{safe_escape(description)}</code>\n"
+        text += f"<b>❖ 𝐃‌єsᴄꝛɪᴘᴛɪση:</b> <code>{safe_escape(description)}</code>\n"
     
     if username:
-        text += f"<b>Permanent Link:</b> <a href='https://t.me/{username}'>Click Here</a>\n"
+        text += f"<b>❖ 𝐏‌єꝛϻᴧηєηᴛ 𝐋‌ɪηᴋ:</b> <a href='https://t.me/{username}'>Click Here</a>\n"
     
     text += (
-        "<b>━━━━━━━━━━━━━━━━</b>\n"
-        "<b>👁 Thank You for Using Our Tool ✅</b>"
+        "<b>•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•</b>\n"
+        "<b>👁 𝐓‌ʜᴧηᴋ 𝐘‌συ ғσꝛ 𝐔‌sɪηɢ 𝐎‌υꝛ 𝐓‌σσʟ ✅</b>"
     )
     return text
 
@@ -297,34 +297,34 @@ async def UserInfo(update, context):
     username = getattr(user, 'username', None)
     
     is_group_context = chat.type in [constants.ChatType.GROUP, constants.ChatType.SUPERGROUP]
-    profile_type = "Bot's Profile Info" if is_bot else "User's Profile Info"
+    profile_type = "𝐁‌σᴛ's 𝐏‌ꝛσғɪʟє 𝐈‌ηғσ" if is_bot else "𝐔‌sєꝛ's 𝐏‌ꝛσғɪʟє 𝐈‌ηғσ"
     
     text = (
-        f"<b>🔍 Showing {profile_type} 📋</b>\n"
-        "<b>━━━━━━━━━━━━━━━━</b>\n"
-        f"<b>Full Name:</b> <b>{safe_escape(full_name)}</b>\n"
+        f"<b>🔍 Sʜσᴡɪηɢ {profile_type} 📋</b>\n"
+        "<b>•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•</b>\n"
+        f"<b>❖ 𝐅‌υʟʟ 𝐍‌ᴧϻє:</b> <b>{safe_escape(full_name)}</b>\n"
     )
     
     if username:
-        text += f"<b>Username:</b> @{username}\n"
+        text += f"<b>❖ 𝐔‌sєꝛηᴧᴍє:</b> @{username}\n"
     
-    text += f"<b>User ID:</b> <code>{user.id}</code>\n"
+    text += f"<b>❖ 𝐔‌sєꝛ 𝐈‌𝐃‌:</b> <code>{user.id}</code>\n"
     
     if is_group_context:
-        text += f"<b>Chat ID:</b> <code>{chat.id}</code>\n"
+        text += f"<b>❖ 𝐂‌ʜᴧᴛ 𝐈‌𝐃‌:</b> <code>{chat.id}</code>\n"
     
     if not is_bot:
-        text += f"<b>Premium User:</b> <b>{premium_status}</b>\n"
+        text += f"<b>❖ 𝐏‌ꝛєϻɪυϻ 𝐔‌sєꝛ:</b> <b>{premium_status}</b>\n"
     
-    text += f"<b>Data Center:</b> <b>{dc_location}</b>\n"
+    text += f"<b>❖ 𝐃‌ᴧᴛᴧ 𝐂‌єηᴛєꝛ:</b> <b>{dc_location}</b>\n"
     
     if not is_bot:
         text += (
-            f"<b>Created On:</b> <b>{account_created_str}</b>\n"
-            f"<b>Account Age:</b> <b>{account_age}</b>\n"
+            f"<b>❖ 𝐂‌ꝛєᴧᴛєᴅ 𝐎‌η:</b> <b>{account_created_str}</b>\n"
+            f"<b>❖ 𝐀‌ᴄᴄσυηᴛ 𝐀‌ɢє:</b> <b>{account_age}</b>\n"
         )
     
-    text += f"<b>Account Frozen:</b> <b>{'Yes' if is_restricted else 'No'}</b>\n"
+    text += f"<b>❖ 𝐀‌ᴄᴄσυηᴛ 𝐅‌ꝛσᴢєη:</b> <b>{'Yes' if is_restricted else 'No'}</b>\n"
     
     status = await get_status_text(user.id)
     
@@ -332,14 +332,14 @@ async def UserInfo(update, context):
         try:
             member = await bot.get_chat_member(chat.id, user.id)
             if member.status == constants.ChatMemberStatus.OWNER:
-                status = f"{status} | 👑 Group Owner" if status else "👑 Group Owner"
+                status = f"{status} | 👑 𝐆‌ꝛσυᴘ 𝐎‌ᴡηєꝛ" if status else "👑 𝐂‌ʜᴧᴛ 𝐎‌ᴡηєꝛ"
             elif member.status == constants.ChatMemberStatus.ADMINISTRATOR:
-                status = f"{status} | 🛡️ Admin" if status else "🛡️ Admin"
+                status = f"{status} | 🛡️ 𝐂‌ʜᴧᴛ 𝐀‌ᴅϻɪη" if status else "🛡️ 𝐂‌ʜᴧᴛ 𝐀‌ᴅϻɪη"
         except:
             pass
 
     if status:
-        text += f"<b>Status:</b> {status}\n"
+        text += f"<b>❖ 𝐒‌ᴛᴧᴛυs:</b> {status}\n"
     
     try:
         pyro_user_full = await pbot.get_users(user_id)
@@ -353,23 +353,23 @@ async def UserInfo(update, context):
                 last_seen = "Last Week"
             elif str(pyro_user_full.status) == "UserStatus.LAST_MONTH":
                 last_seen = "Last Month"
-        text += f"<b>Users Last Seen:</b> <b>{last_seen}</b>\n"
+        text += f"<b>❖ 𝐋‌ᴧsᴛ Sєєη:</b> <b>{last_seen}</b>\n"
     except:
         text += f"<b>Users Last Seen:</b> <b>Unknown</b>\n"
 
     bio = getattr(user, 'bio', None)
     if bio:
-        text += f"<b>Bio:</b> <code>{safe_escape(bio)}</code>\n"
+        text += f"<b>❖ 𝐁‌ɪσ:</b> <code>{safe_escape(bio)}</code>\n"
     
     text += (
-        f"<b>Permanent Link:</b> <a href='tg://user?id={user.id}'>Click Here</a>\n"
+        f"<b>❖ 𝐏‌єꝛϻᴧηєηᴛ 𝐋‌ɪηᴋ:</b> <a href='tg://user?id={user.id}'>Click Here</a>\n"
         "<b>━━━━━━━━━━━━━━━━</b>\n"
-        "<b>👁 Thank You for Using Our Tool ✅</b>"
+        "<b>👁 𝐓‌ʜᴧηᴋ 𝐘‌συ ғσꝛ 𝐔‌sɪηɢ 𝐎‌υꝛ 𝐓‌σσʟ ✅</b>"
     )
 
     keyboard = None
     try:
-        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"📋 {full_name}", url=f"tg://user?id={user.id}")]])
+        keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(f"{full_name}", url=f"tg://user?id={user.id}")]])
     except:
         pass
 
