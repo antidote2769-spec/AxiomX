@@ -112,8 +112,8 @@ async def start_all_clients():
         await pbot.start()
         LOGGER.info("Pyrogram Bot Started!")
     except FloodWait as e:
-        LOGGER.warning(f"FloodWait: Waiting {e.x} seconds...")
-        await asyncio.sleep(e.x)
+        LOGGER.warning(f"FloodWait: Waiting {e.value} seconds...")
+        await asyncio.sleep(e.value)
         await pbot.start()
         LOGGER.info("Pyrogram Bot Started after FloodWait!")
     
