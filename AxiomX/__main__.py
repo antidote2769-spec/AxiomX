@@ -52,8 +52,8 @@ async def start_services():
     server = web.AppRunner(web_server())
     await server.setup()
     await web.TCPSite(server, BIND_ADDRESS, PORT).start()
-    logging.info("Web Server Initialized Successfully")
-    logging.info("=========== Service Startup Complete ===========")
+    logging.info("Axiom Web Server Initialized Successfully")
+    logging.info("=========== Service Startup Completed Successfully ===========")
   
     asyncio.create_task(keep_alive())
     logging.info("Keep Alive Service Started")
@@ -74,5 +74,5 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(asyncio.gather(*async_funcs))
     
-    logging.info("Starting PTB Application...")
+    logging.info("Starting AxiomBots Manager Application...")
     app.run_polling(drop_pending_updates=True, allowed_updates=Update.ALL_TYPES)
