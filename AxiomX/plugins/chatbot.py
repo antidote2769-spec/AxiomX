@@ -683,20 +683,20 @@ async def get_chatbot_reply(text: str, user_id=None):
                 
                     if choices:
                         reply = choices[0]["message"]["content"]
+                        
+                        await save_chat(user_id, "user", text)
+                        await save_chat(user_id, "assistant", reply)
+                        
+                        return reply
                 except Exception as e:
                     print(f"Chatbot JSON Error: {e}")
                     return None
             else:
                 print(f"Chatbot API Error: {response.status}")
                 return None
-                
-                    await save_chat(user_id, "user", text)
-                    await save_chat(user_id, "assistant", reply)
-                
-                    return reply
     except Exception as e:
         print(f"Chatbot AI Error: {e}")
-    return None
+        return None
 
 @pbot.on_message(filters.command("beta"))
 async def teach_user(_, message):
