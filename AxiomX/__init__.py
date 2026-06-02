@@ -180,6 +180,11 @@ async def initialize_database():
     await greetings.initialize_chats()
     await banall_db.initialize_chats()
     await sudo.initialize_cache()
+    # Create version collection if it doesn't exist
+    version_collection = database['version']
+    existing_version = await version_collection.find_one({})
+    if not existing_version:
+        await version_collection.insert_one({"_id": 1, "version": "1.0"})
     LOGGER.info(
         "Initialized (All) - [users, chats, riddle, premium, afk, chatbot, blocks, autofilter, notes, fsub, warns, locks, antiflood, antiraid, approvals, filters, sudo, antiremovelink, antitag, joinmute, antiforward, mediadelete, ghost, nightmode, logs, bio, greetings, banall] —» DATABASE"
     )
