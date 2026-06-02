@@ -120,13 +120,10 @@ async def start_all_clients():
     try:
         await user.start()
         LOGGER.info("Pyrogram User Started!")
+    except EOFError:
+        LOGGER.warning("Pyrogram User not started: No interactive input available (expected in container)")
     except Exception as e:
         LOGGER.warning(f"Pyrogram User not started: {e}")
-    
-    await tbot.start(bot_token=TOKEN)
-    LOGGER.info("Telethon Bot Started!")
-    
-    LOGGER.info("All Clients Started!")
        
 
 async def stop_all_clients():
