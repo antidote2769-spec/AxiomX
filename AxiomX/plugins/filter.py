@@ -120,11 +120,11 @@ async def filter_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 if rtype == "text":
                     await safe_reply_text(message, rdata, parse_mode="HTML", disable_web_page_preview=True, reply_markup=keyboard)
                 elif rtype == "photo":
-                    await safe_reply_photo(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard)
+                    await safe_reply_photo(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard, has_spoiler=True)
                 elif rtype == "document":
                     await safe_reply_document(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard)
                 elif rtype == "video":
-                    await safe_reply_video(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard)
+                    await safe_reply_video(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard, has_spoiler=True)
                 elif rtype == "sticker":
                     await safe_reply_sticker(message, rdata, reply_markup=keyboard)
                 elif rtype == "audio":
@@ -132,7 +132,7 @@ async def filter_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 elif rtype == "voice":
                     await safe_reply_voice(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard)
                 elif rtype == "animation":
-                    await safe_reply_animation(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard)
+                    await safe_reply_animation(message, rdata, caption=caption if caption else None, parse_mode="HTML" if caption else None, reply_markup=keyboard, has_spoiler=True)
             except:
                 pass
             break
