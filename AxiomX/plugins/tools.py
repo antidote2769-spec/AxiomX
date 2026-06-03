@@ -94,7 +94,7 @@ async def fk_address(_, message):
                 if len(text) > 1023:
                     await m.reply_text(text)
                 else:
-                    await message.reply_photo(photo=photo_url, caption=text)
+                    await message.reply_photo(photo=photo_url, caption=text, has_spoiler=True)
             else:
                 await message.reply(font("Failed to fetch data from the API."))
               
