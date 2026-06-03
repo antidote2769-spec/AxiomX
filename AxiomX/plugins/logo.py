@@ -125,7 +125,8 @@ async def logo_handler(client, message: Message):
         await message.reply_photo(
             photo=path,
             caption=f"Powered by {BOT_USERNAME}",
-            reply_markup=InlineKeyboardMarkup(buttons)
+            reply_markup=InlineKeyboardMarkup(buttons),
+            has_spoiler=True
         )
 
         os.remove(path)
