@@ -87,5 +87,5 @@ async def makeqr(c, m):
     url = f"https://api.qrserver.com/v1/create-qr-code/?data={encoded_text}&size=300x300"
     
     await m.reply_photo(
-        url, caption=f"<b>QR Code Maker by @{c.me.username}</b>", quote=True
+        url, caption=f"<b>QR Code Maker by @{c.me.username}</b>", has_spoiler=True, quote=True
     )
