@@ -228,7 +228,7 @@ async def search_anime(_, m: types.Message):
         types.InlineKeyboardButton(font("⚔️ Character"), callback_data=f"anime_chars#{m.from_user.id}#{result['anime_id']}", style=ButtonStyle.SUCCESS),
         types.InlineKeyboardButton(font("❌ Close"), callback_data=f"pyrodel#{m.from_user.id}", style=ButtonStyle.DANGER)
     ]])
-    return await m.reply_photo(photo=result['photo_url'], caption=text, reply_markup=buttons)
+    return await m.reply_photo(photo=result['photo_url'], caption=text, has_spoiler=True, reply_markup=buttons)
 
 
 @bot.on_message(filters.command("sauce", prefix_cmds) & ~filters.forwarded, group=4)
