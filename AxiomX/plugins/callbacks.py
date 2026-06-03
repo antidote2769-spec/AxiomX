@@ -306,9 +306,9 @@ async def back_to_start_callback(client, query):
     await query.answer(font("Here is the start menu..."))
     
     user = query.from_user
-    mention = f"[{user.first_name}](tg://user?id={user.id})"
+    mention = f'<a href="tg://user?id={user.id}">{html.escape(user.first_name)}</a>'
     bot_info = await get_cached_bot_info(client)
-    bot_mention = f"[{bot_info.first_name}](tg://user?id={bot_info.id})"
+    bot_mention = f'<a href="tg://user?id={bot_info.id}">{html.escape(bot_info.first_name)}</a>'
     bot_username = bot_info.username
     
     support_url = SUPPORT_CHAT if SUPPORT_CHAT.startswith("http") else f'https://t.me/{SUPPORT_CHAT.lstrip("@")}'
@@ -323,14 +323,14 @@ async def back_to_start_callback(client, query):
         [ptypes.InlineKeyboardButton(font('σᴡηєꝛ ✧ ᴀxɪσϻ'), user_id=config.AXIOM_UID, style=ButtonStyle.SUCCESS)]
     ]
     caption = (
-        f"<blockquote><b>**⍣ 𝐇‌єʏᴧ {mention}\n"
-        f"𝐈‌'ϻ {bot_mention} 𝐀‌η 𝐀‌ᴅᴠᴧηᴄє 𝐀‌𝐈‌ 𝐈‌ηᴛєɢꝛᴧᴛєᴅ 𝐖‌ɪᴛʜ 𝐑‌σʙσᴛ, 𝐈‌'ʟʟ 𝐌‌ᴧηᴧɢє 𝐘‌συꝛ 𝐆‌ꝛσυᴘ 𝐄‌ᴧsɪʟʏ..**</b></blockquote>\n"
+        f"<blockquote><b>⍣ 𝐇‌єʏᴧ {mention}\n"
+        f"𝐈‌'ϻ {bot_mention} 𝐀‌η 𝐀‌ᴅᴠᴧηᴄє 𝐀‌𝐈‌ 𝐈‌ηᴛєɢꝛᴧᴛєᴅ 𝐖‌ɪᴛʜ 𝐑‌σʙσᴛ, 𝐈‌'ʟʟ 𝐌‌ᴧηᴧɢє 𝐘‌συꝛ 𝐆‌ꝛσυᴘ 𝐄‌ᴧsɪʟʏ..</b></blockquote>\n"
         f"•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n"
-        f"<blockquote expandable><b>**➛ 70+ 𝐌‌υʟᴛɪᴘʟє 𝐅‌єᴧᴛυꝛєs 𝐖‌ɪᴛʜ 𝐀‌𝐈‌ **\n"
-        f"**➛ 𝐄‌ᴧsʏ 𝐓‌σ 𝐔‌sє, 𝐀‌ʟʟ 𝐈‌η 𝐎‌ηє 𝐁‌σᴛ**\n"
-        f"**➛ 𝐒‌ᴧғєsᴛ 𝐆‌ꝛσυᴘ 𝐌‌ᴧηᴧɢєᴍєηᴛ 𝐁‌σᴛ**</b></blockquote>\n"
+        f"<blockquote expandable><b>**➛ 70+ 𝐌‌υʟᴛɪᴘʟє 𝐅‌єᴧᴛυꝛєs 𝐖‌ɪᴛʜ 𝐀‌𝐈‌. \n"
+        f"➛ 𝐄‌ᴧsʏ 𝐓‌σ 𝐔‌sє, 𝐀‌ʟʟ 𝐈‌η 𝐎‌ηє 𝐁‌σᴛ.\n"
+        f"➛ 𝐒‌ᴧғєsᴛ 𝐆‌ꝛσυᴘ 𝐌‌ᴧηᴧɢєᴍєηᴛ 𝐁‌σᴛ.</b></blockquote>\n"
         f"•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n"
-        f"<blockquote><b>**⍣ 𝐇‌ɪᴛ 𝐓‌ʜє /help 𝐁‌υᴛᴛση 𝐓‌σ 𝐊‌ησᴡ 𝐌‌ʏ 𝐀‌ʙɪʟɪᴛɪєs</b></blockquote>**"
+        f"<blockquote><b>**⍣ 𝐇‌ɪᴛ 𝐓‌ʜє /help 𝐁‌υᴛᴛση 𝐓‌σ 𝐊‌ησᴡ 𝐌‌ʏ 𝐀‌ʙɪʟɪᴛɪєs.</b></blockquote>**"
     )
     
     try:
