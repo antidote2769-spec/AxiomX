@@ -62,7 +62,8 @@ async def imdb_search(_, message):
             await message.reply_photo(
                 photo=d['media'],
                 caption=caption,
-                reply_markup=InlineKeyboardMarkup(buttons)
+                reply_markup=InlineKeyboardMarkup(buttons),
+                has_spoiler=True
             )
         else:
             await message.reply_text(
