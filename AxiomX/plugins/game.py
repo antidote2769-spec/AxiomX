@@ -86,7 +86,7 @@ async def _richList(_, m: types.Message):
         text += f"{roll}. {mention} — {user['cash']} 💸\n"
 
     text += "\n**Think you can outshine me? Bring it on! 😼**"
-    await m.reply_photo("https://files.catbox.moe/kjdsse.jpg", caption=text, parse_mode=enums.ParseMode.MARKDOWN)
+    await m.reply_photo("https://files.catbox.moe/kjdsse.jpg", caption=text, parse_mode=enums.ParseMode.MARKDOWN, has_spoiler=True)
 
 # Balance check
 @bot.on_message(filters.command("balance") & ~filters.forwarded)
@@ -96,7 +96,7 @@ async def _checkBalance(_, m: types.Message):
     if cash == 0:
         return await m.reply("*Bro* You are too poor, try making some money otherwise you can't live in the world! 🥴")
     await update_name(user.id, user.full_name)
-    await m.reply_photo(TRY_LATER_IMG, caption=f"**Yo, {user.full_name}! Your balance is a whopping {cash} cash!** 💸💸")
+    await m.reply_photo(TRY_LATER_IMG, caption=f"**Yo, {user.full_name}! Your balance is a whopping {cash} cash!** 💸💸", has_spoiler=True)
 
 # Steal command
 @bot.on_message(filters.command(["domain", "steal"]))
@@ -159,14 +159,14 @@ async def _gamble(_, m: types.Message):
     if multiplier < 0:
         loss = int(gamble * abs(multiplier))
         await update_cash(user.id, -loss)
-        return await m.reply_photo(SERIOUS_IMG, caption=f"🤧 You lost {loss} 💸 to a curse!")
+        return await m.reply_photo(SERIOUS_IMG, caption=f"🤧 You lost {loss} 💸 to a curse!", has_spoiler=True)
     elif multiplier > 0:
         win = int(gamble * multiplier)
         await update_cash(user.id, win)
-        return await m.reply_photo(GOOD_LUCK_IMG, caption=f"🔥 You earned {win} Cash! 💸")
+        return await m.reply_photo(GOOD_LUCK_IMG, caption=f"🔥 You earned {win} Cash! 💸", has_spoiler=True)
     else:
         await update_cash(user.id, -gamble)
-        return await m.reply_photo(BAD_LUCK_IMG, caption=f"😭 You lost {gamble} Cash. Try again!")
+        return await m.reply_photo(BAD_LUCK_IMG, caption=f"😭 You lost {gamble} Cash. Try again!", has_spoiler=True)
 
 # Score + reward game handler
 async def handle_dice_game(user, m, emoji, user_dict, rewards):
@@ -174,7 +174,8 @@ async def handle_dice_game(user, m, emoji, user_dict, rewards):
         remaining = (user_dict[user.id] - datetime.now()).total_seconds() / 60
         return await m.reply_photo(
             TRY_LATER_IMG,
-            caption=f"🥲 Don't spam. Try again after {remaining:.2f} minutes ⏳"
+            caption=f"🥲 Don't spam. Try again after {remaining:.2f} minutes ⏳",
+            has_spoiler=True
         )
 
     user_dict[user.id] = datetime.now() + timedelta(minutes=FLOOD_MAX)
@@ -196,7 +197,7 @@ async def handle_dice_game(user, m, emoji, user_dict, rewards):
         caption += "😢 No reward this time. Keep trying!"
         image = SERIOUS_IMG
 
-    await msg_dice.reply_photo(image, caption=caption)
+    await msg_dice.reply_photo(image, caption=caption, has_spoiler=True)
     asyncio.create_task(remove_user_after_delay(user.id, user_dict))
 
 # Rewards
