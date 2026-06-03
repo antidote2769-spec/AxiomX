@@ -238,6 +238,7 @@ async def ChatInfo(update, context):
                 await m.reply_photo(
                     photo=photo_bytes,
                     caption=text,
+                    has_spoiler=True,
                     parse_mode=constants.ParseMode.HTML
                 )
                 await msg.delete()
@@ -379,14 +380,14 @@ async def UserInfo(update, context):
         
         if photo_bytes:
             try:
-                await message.reply_photo(photo=photo_bytes, caption=text, 
+                await message.reply_photo(photo=photo_bytes, caption=text, has_spoiler=True,
                                         parse_mode=constants.ParseMode.HTML, 
                                         reply_markup=keyboard)
                 await msg.delete()
                 return
             except BadRequest:
                 try:
-                    await message.reply_photo(photo=photo_bytes, caption=text, 
+                    await message.reply_photo(photo=photo_bytes, caption=text, has_spoiler=True,
                                             parse_mode=constants.ParseMode.HTML)
                     await msg.delete()
                     return
