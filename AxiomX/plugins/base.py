@@ -423,7 +423,7 @@ async def _handle_start_private(message: Message):
         um = f'<a href="tg://user?id={u.id}">{html.escape(u.first_name or "there")}</a>'
         b = _gsb(uid)
         tx = f"<blockquote><b>⍣ 𝐇‌єʏᴧ {um}\n✧ 𝐈‌'ϻ {bm} 𝐀‌η 𝐀‌ᴅᴠᴧηᴄє 𝐀‌𝐈‌ 𝐈‌ηᴛєɢꝛᴧᴛєᴅ 𝐖‌ɪᴛʜ 𝐑‌σʙσᴛ, 𝐈‌'ʟʟ 𝐌‌ᴧηᴧɢє 𝐘‌συꝛ 𝐆‌ꝛσυᴘ 𝐄‌ᴧsɪʟʏ.</b></blockquote>\n•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n<blockquote><b>➛ 70+ 𝐌‌υʟᴛɪᴘʟє 𝐅‌єᴧᴛυꝛєs 𝐖‌ɪᴛʜ 𝐀‌𝐈‌\n➛ 𝐄‌ᴧsʏ 𝐓‌σ 𝐔‌sє, 𝐀‌ʟʟ 𝐈‌η 𝐎‌ηє 𝐁‌σᴛ\n➛ 𝐒‌ᴧғєsᴛ 𝐆‌ꝛσυᴘ 𝐌‌ᴧηᴧɢєᴍєηᴛ 𝐁‌σᴛ</b></blockquote>\n•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n<blockquote><b>⍣ 𝐇‌ɪᴛ 𝐓‌ʜє /help 𝐁‌υᴛᴛση 𝐓‌σ 𝐊‌ησᴡ 𝐌‌ʏ 𝐀‌ʙɪʟɪᴛɪєs</b></blockquote>"
-        sent = await _sp(cid=message.chat.id, p=getattr(config, "PM_START_IMG", None), c=tx, rm=b, eid=random.choice(SE))
+        sent = await _sp(cid=message.chat.id, p=getattr(config, "PM_START_IMG", None), c=tx, rm=b, eid=random.choice(SE), has_spoiler=True)
         if not sent:
             await _sm(message.chat.id, "Hello — start menu photo failed, but I am online. Use /help to open commands.", rm=b)
     except Exception as e:
