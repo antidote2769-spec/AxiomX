@@ -276,7 +276,7 @@ async def emoji_mix_func(update, context):
                 with open(path, "wb") as file:
                     file.write(image_content)
                 convert_to_webp(path)
-                await m.reply_photo(path)
+                await m.reply_photo(path, has_spoiler=True)
                 await m.reply_document(path, f"*By {config.BOT_USERNAME}*", parse_mode=constants.ParseMode.MARKDOWN)
             except Exception as e:
                 return await m.reply_text(
@@ -378,7 +378,7 @@ async def watermark(update, context):
     draw.text((x, y), mark, font=font, fill="white")
     photo.save(path)
     txt = f"🖼️ *WaterMark Size*: {size}%\n\n" + f"*By {config.BOT_USERNAME}*"
-    await m.reply_photo(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
+    await m.reply_photo(path, caption=txt, has_spoiler=True, parse_mode=constants.ParseMode.MARKDOWN)
     await m.reply_document(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
     os.remove(path)
 
@@ -420,7 +420,7 @@ async def blur(update, context):
      photo = Photo.filter(ImageFilter.GaussianBlur(radius=blur_radious))
      photo.save(path)
      txt = f"🖼️ *Blur radious*: {blur_radious}%\n\n" + f"*By {config.BOT_USERNAME}*"
-     await m.reply_photo(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
+     await m.reply_photo(path, caption=txt, has_spoiler=True, parse_mode=constants.ParseMode.MARKDOWN)
      await m.reply_document(path, caption=txt, parse_mode=constants.ParseMode.MARKDOWN)
      os.remove(path)
 
@@ -461,7 +461,7 @@ async def StickerToJpeg(update, context):
      sticker= message.reply_to_message.sticker
      file = await bot.get_file(sticker.file_id)
      media = await file.download_to_drive('photo.png')
-     await message.reply_photo(media)
+     await message.reply_photo(media, has_spoiler=True)
      await message.reply_document(media)
      os.remove(media)
 
