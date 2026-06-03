@@ -41,7 +41,7 @@ async def phlogo(b, m):
         x = Image.open("sahil.png")
         x.save("sahil.png")
         x.close()
-        await m.reply_photo("sahil.png")
+        await m.reply_photo("sahil.png", has_spoiler=True)
         if os.path.exists("sahil.png"):
             os.remove("sahil.png")
     except Exception as e:
