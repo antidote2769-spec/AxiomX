@@ -123,9 +123,9 @@ async def auto_download(c: Client, m: Message):
         if len(downloaded) == 1:
             f = downloaded[0]
             if f["is_video"]:
-                await m.reply_video(f["path"], caption="✅ Downloaded from Instagram")
+                await m.reply_video(f["path"], caption="✅ Downloaded from Instagram", has_spoiler=True)
             else:
-                await m.reply_photo(f["path"], caption="✅ Downloaded from Instagram")
+                await m.reply_photo(f["path"], caption="✅ Downloaded from Instagram", has_spoiler=True)
         else:
             # Send in batches of 10 (Telegram limit for media groups)
             for i in range(0, len(downloaded), 10):
