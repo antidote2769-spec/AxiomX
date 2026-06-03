@@ -83,11 +83,11 @@ async def pinterest(_, message):
           video_urls = data.get('video_urls', [])
           txt = f"**❤️ By {config.BOT_USERNAME}**"
           if image_url:
-              await m.reply_photo(image_url, caption=txt)
+              await m.reply_photo(image_url, caption=txt, has_spoiler=True)
           if video_urls:
               for video_url in video_urls:
                  try:
-                   await m.reply_video(video_url, thumb=image_url, caption=txt)
+                   await m.reply_video(video_url, thumb=image_url, caption=txt, has_spoiler=True)
                    await asyncio.sleep(2.5)
                  except:
                     pass
@@ -139,7 +139,7 @@ async def spotifyer(_, message):
                         f"🎵 **Song Name**: `{name}`"
                         f"\n\n❤️ **By {config.BOT_USERNAME}**"
                       )
-                      await m.reply_photo(image, caption=caption_txt)
+                      await m.reply_photo(image, caption=caption_txt, has_spoiler=True)
                       await m.reply_audio(
                           audio=path, 
                           title=name,
@@ -213,12 +213,14 @@ async def instagramDL(_, message):
                             if mime_type.startswith('image'):
                                 await message.reply_photo(
                                     path,
-                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**"
+                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**",
+                                    has_spoiler=True
                                 )
                             else:
                                 await message.reply_video(
                                     path,
-                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**"
+                                    caption=f"❤️ **Downloaded by {config.BOT_USERNAME}**",
+                                    has_spoiler=True
                                 )
                         finally:
                             # Cleanup
@@ -306,7 +308,7 @@ async def PinterestVideoCQ(update, context):
         thumb = video['thumbnail']
         
         if video_url.endswith('.mp4'):
-            return await m.reply_video(video_url, duration=duration, thumbnail=thumb)
+            return await m.reply_video(video_url, duration=duration, thumbnail=thumb, has_spoiler=True)
         
         msg = await m.reply_text(
             "📩 *Video Downloading ...*",
@@ -427,6 +429,7 @@ async def XDl(_, message):
       
     await message.reply_video(
                  video_url,
+                 has_spoiler=True,
                  caption=(
                  f"📛 **Title**: {results.get('title')}\n"
                  f"⏱️ **Duration**: {results.get('duration')}\n"
