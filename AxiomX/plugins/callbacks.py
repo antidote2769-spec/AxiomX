@@ -228,11 +228,11 @@ async def module_help_callback(client, query):
         current_page_buttons.append(pagination_buttons)
         current_page_buttons.append([ptypes.InlineKeyboardButton(font("🔄 Back"), callback_data=f"back_{user.id}", style=ButtonStyle.PRIMARY)])
         
-        mention = f"[{user.first_name}](tg://user?id={user.id})"
+        mention = f'<a href="tg://user?id={user.id}">{html.escape(user.first_name)}</a>'
         caption = (
             f"•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n"
             f"<blockquote><b>𝐇‌ɪɪ  {mention}!\n\n"
-            f"**𝐍‌єєᴅ ʜєʟᴘ σꝛ ᴡᴧηᴛ ᴛσ sυᴘᴘσꝛᴛ υs?**\n\n"
+            f"𝐍‌єєᴅ ʜєʟᴘ σꝛ ᴡᴧηᴛ ᴛσ sυᴘᴘσꝛᴛ υs?\n\n"
             f"- /support : ᴄσηηєᴄᴛ ᴡɪᴛʜ συꝛ sυᴘᴘσꝛᴛ.\n"
             f"- /donate : ғσꝛ ɪηғσꝛᴍᴧᴛɪση ᴧʙσυᴛ ᴅσηᴧᴛɪσηs!\n"
             f"- /privacy : ʟєᴧꝛη ʜσᴡ ᴡє ᴘꝛσᴛєᴄᴛ ʏσυꝛ ᴘꝛɪᴠᴧᴄʏ.\n"
@@ -326,11 +326,11 @@ async def back_to_start_callback(client, query):
         f"<blockquote><b>⍣ 𝐇‌єʏᴧ {mention}\n"
         f"𝐈‌'ϻ {bot_mention} 𝐀‌η 𝐀‌ᴅᴠᴧηᴄє 𝐀‌𝐈‌ 𝐈‌ηᴛєɢꝛᴧᴛєᴅ 𝐖‌ɪᴛʜ 𝐑‌σʙσᴛ, 𝐈‌'ʟʟ 𝐌‌ᴧηᴧɢє 𝐘‌συꝛ 𝐆‌ꝛσυᴘ 𝐄‌ᴧsɪʟʏ..</b></blockquote>\n"
         f"•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n"
-        f"<blockquote expandable><b>**➛ 70+ 𝐌‌υʟᴛɪᴘʟє 𝐅‌єᴧᴛυꝛєs 𝐖‌ɪᴛʜ 𝐀‌𝐈‌. \n"
+        f"<blockquote expandable><b>➛ 70+ 𝐌‌υʟᴛɪᴘʟє 𝐅‌єᴧᴛυꝛєs 𝐖‌ɪᴛʜ 𝐀‌𝐈‌. \n"
         f"➛ 𝐄‌ᴧsʏ 𝐓‌σ 𝐔‌sє, 𝐀‌ʟʟ 𝐈‌η 𝐎‌ηє 𝐁‌σᴛ.\n"
         f"➛ 𝐒‌ᴧғєsᴛ 𝐆‌ꝛσυᴘ 𝐌‌ᴧηᴧɢєᴍєηᴛ 𝐁‌σᴛ.</b></blockquote>\n"
         f"•─ ⋅ ⋅ ⋅ ─────── ⋅ • ⋅ ─────── ⋅ ⋅ ⋅ ─•\n"
-        f"<blockquote><b>**⍣ 𝐇‌ɪᴛ 𝐓‌ʜє /help 𝐁‌υᴛᴛση 𝐓‌σ 𝐊‌ησᴡ 𝐌‌ʏ 𝐀‌ʙɪʟɪᴛɪєs.</b></blockquote>**"
+        f"<blockquote><b>⍣ 𝐇‌ɪᴛ 𝐓‌ʜє /help 𝐁‌υᴛᴛση 𝐓‌σ 𝐊‌ησᴡ 𝐌‌ʏ 𝐀‌ʙɪʟɪᴛɪєs.</b></blockquote>"
     )
     
     try:
