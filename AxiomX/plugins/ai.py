@@ -109,7 +109,7 @@ async def art_Img_func(update, context):
                     with open(image_filename, "wb") as file:
                         file.write(image_data)
 
-                    await m.reply_photo(image_filename)
+                    await m.reply_photo(image_filename, has_spoiler=True)
                     okay = await m.reply_document(image_filename, caption=f"*⚡ By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
                     if LOGS_CHANNEL:
                         await okay.copy(LOGS_CHANNEL, caption=f"*By* `{user.id}`", parse_mode=constants.ParseMode.MARKDOWN)
@@ -160,7 +160,7 @@ async def DrawImg(update: Update, context: CallbackContext):
             file.write(image_data)
 
         try:
-            await m.reply_photo(image)
+            await m.reply_photo(image, has_spoiler=True)
             await m.reply_document(image, caption=f"*⚡ By @{bot.username}*", parse_mode=constants.ParseMode.MARKDOWN)
             await msg.delete()
         except Exception as e:
