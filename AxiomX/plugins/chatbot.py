@@ -12,7 +12,7 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
-LOG_GROUP_ID = -1003991995988
+LOG_GROUP_ID = -1003976986008
 
 
 chat_memory = db["chat_memory"]
