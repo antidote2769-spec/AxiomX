@@ -107,6 +107,7 @@ async def callback_handler(_, query: CallbackQuery):
                             await query.message.reply_photo(
                                 photo=temp_file_path,
                                 caption=replymsg,
+                                has_spoiler=True,
                                 parse_mode=ParseMode.MARKDOWN,
                                 reply_markup=InlineKeyboardMarkup(buttons_after_result)
                             )
