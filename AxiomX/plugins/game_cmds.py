@@ -42,6 +42,7 @@ async def _setClaimCharacter(update, context):
       photo = random.choice(character['images'])
       return await m.reply_photo(
             photo=photo,
+            has_spoiler=True,
             caption=f"<b>Yes. added character {character['character_name']} to claim list. p.s can be character claimed using</b> <code>/claim {code}</code>",
             parse_mode=constants.ParseMode.HTML
       )
