@@ -490,6 +490,7 @@ async def countryInfo(update, context):
             await m.reply_photo(
                 photo=flag_url,
                 caption=caption,
+                has_spoiler=True,
                 parse_mode=constants.ParseMode.MARKDOWN,
                 reply_markup=buttons
             )
