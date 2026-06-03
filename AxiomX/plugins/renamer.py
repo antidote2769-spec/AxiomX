@@ -58,7 +58,7 @@ async def thumbnail(_, message):
                    return await m.reply(font("❌ No thumbnail is currently in disk!"))
        else:
             if user.id in temp:
-                return await m.reply_photo(photo=temp[user.id], caption="👀 **Your currently saved thumbnail!**")
+                return await m.reply_photo(photo=temp[user.id], caption="👀 **Your currently saved thumbnail!**", has_spoiler=True)
             else:
                 return await m.reply(font("❌ No thumbnail is currently in disk!"))
  
