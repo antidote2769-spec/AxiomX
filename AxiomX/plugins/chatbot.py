@@ -8,6 +8,12 @@ from AxiomX.helpers.decorator import protected_ids
 from AxiomX.db.chatbot import add_chat, remove_chat, CHAT_IDS
 import config
 from AxiomX.helpers.mongo import db
+import logging
+
+LOGGER = logging.getLogger(__name__)
+
+LOG_GROUP_ID = -1003991995988
+
 
 chat_memory = db["chat_memory"]
 user_memory = db["user_memory"]
@@ -425,6 +431,16 @@ stay calm and supportive.
 Remember what topic is currently being discussed.
 
 Do not answer every message as a new conversation.
+
+If TRAINED USER PROFILE exists:
+
+- This information is permanently true.
+- Owner Maanav personally verified it.
+- Treat it as highest priority memory.
+- Never ignore it.
+- If user asks about himself, use this profile first.
+- If profile contains name, relation, profession or traits, remember them in all future conversations.
+
 """
 
 async def save_chat(user_id, role, text):
@@ -502,6 +518,10 @@ async def get_trained_user(user_id):
 
 async def extract_memory(user_id, text):
     try:
+
+        if AxiomX.aiohttpsession is None:
+            await init_aiohttp_session()
+
         headers = {
             "Authorization": f"Bearer {config.GROQ_API_KEY}"
         }
@@ -551,13 +571,17 @@ Return NONE
         ) as resp:
         
             if resp.status != 200:
-                print(f"API Error: {resp.status}")
+                await log_to_group(
+                    f"Memory API Error: {resp.status}"
+                )
                 return
         
             try:
                 result = await resp.json()
             except Exception as e:
-                print(f"JSON Parse Error: {e}")
+                await log_to_group(
+                    f"Memory JSON Error:\n{e}"
+                )
                 return
 
             memory = (
@@ -594,7 +618,9 @@ Return NONE
                 )
 
     except Exception as e:
-        print("Memory Error:", e)
+        await log_to_group(
+            f"Memory Error:\n{e}"
+        )
 
 
 async def get_chatbot_reply(text: str, user_id=None):
@@ -614,22 +640,38 @@ async def get_chatbot_reply(text: str, user_id=None):
     memory = await get_user_memory(user_id)
     owner_facts = await get_owner_knowledge()
     trained_data = await get_trained_user(user_id)
+    if trained_data:
+    
+        await pbot.send_message(
+            LOG_GROUP_ID,
+            f"""
+    <pre>
+    ======== TRAINED USER ========
+    
+    USER ID : {user_id}
+    
+    PROFILE :
+    
+    {trained_data.get("profile")}
+    
+    ==============================
+    </pre>
+    """,
+            parse_mode=enums.ParseMode.HTML
+        )
+    
+        LOGGER.info(
+            f"Trained profile loaded for {user_id}"
+        )
 
     extra_profile = ""
     
     if trained_data:
         extra_profile = f"""
     
-    OWNER PROVIDED PROFILE
+    OWNER PROVIDED PROFILE:
     
-    Name:
-    {trained_data.get("name","Unknown")}
-    
-    Relation:
-    {trained_data.get("relation","Unknown")}
-    
-    Instruction:
-    {trained_data.get("instruction","")}
+    {trained_data.get("profile","")}
     
     Owner Maanav personally provided this information.
     
@@ -689,29 +731,59 @@ async def get_chatbot_reply(text: str, user_id=None):
                         
                         return reply
                 except Exception as e:
-                    print(f"Chatbot JSON Error: {e}")
+                    LOGGER.exception(
+                        f"Chatbot JSON Error: {e}"
+                    )
                     return None
             else:
-                print(f"Chatbot API Error: {response.status}")
+                LOGGER.error(
+                    f"Chatbot API Error: {response.status}"
+                )
                 return None
     except Exception as e:
-        print(f"Chatbot AI Error: {e}")
+        await log_to_group(
+            f"Chatbot AI Error:\n{e}"
+        )
         return None
+
+async def log_to_group(text):
+    try:
+        await pbot.send_message(
+            LOG_GROUP_ID,
+            f"<pre>{text}</pre>",
+            parse_mode=enums.ParseMode.HTML
+        )
+    except:
+        pass
+
 
 @pbot.on_message(filters.command("beta"))
 async def teach_user(_, message):
 
-    if not message.from_user or message.from_user.id != 7169279112:
+    OWNER_ID = 7169279112
+
+    if (
+        not message.from_user
+        or message.from_user.id != OWNER_ID
+    ):
         return
 
     try:
+        if len(message.command) < 2:
+            return await message.reply_text(
+                "Usage:\n/beta USER_ID\nProfile Text"
+            )
+
         parts = message.text.split("\n", 1)
 
-        first = parts[0].split()
+        if len(parts) < 2:
+            return await message.reply_text(
+                "Profile text missing."
+            )
 
-        target_id = int(first[1])
+        target_id = int(message.command[1])
 
-        profile = parts[1]
+        profile = parts[1].strip()
 
         await save_trained_user(
             target_id,
@@ -721,12 +793,69 @@ async def teach_user(_, message):
         )
 
         await message.reply_text(
-            "User profile saved."
+            f"✅ Profile saved for `{target_id}`"
         )
 
     except Exception as e:
-        await message.reply_text(str(e))
+        LOGGER.exception(f"Beta Command Error: {e}")
+        return await message.reply_text(str(e))
+
+    await pbot.send_message(
+        LOG_GROUP_ID,
+        f"""
+    <pre>
+    NEW TRAINED USER
     
+    USER ID : {target_id}
+    
+    PROFILE :
+    
+    {profile}
+    </pre>
+    """,
+        parse_mode=enums.ParseMode.HTML
+    )
+
+@pbot.on_message(filters.command("checkuser"))
+async def check_user(_, message):
+
+    OWNER_ID = 7169279112
+
+    if (
+        not message.from_user
+        or message.from_user.id != OWNER_ID
+    ):
+        return
+
+    try:
+        if len(message.command) < 2:
+            return await message.reply_text(
+                "Usage:\n/checkuser USER_ID"
+            )
+
+        uid = int(message.command[1])
+
+        data = await get_trained_user(uid)
+
+        if not data:
+            return await message.reply_text(
+                "No trained profile found."
+            )
+
+        profile = data.get("profile", "Empty")
+
+        await message.reply_text(
+            f"<pre>{profile}</pre>",
+            parse_mode=enums.ParseMode.HTML
+        )
+
+    except Exception as e:
+        LOGGER.exception(
+            f"CheckUser Error: {e}"
+        )
+        await message.reply_text(str(e))
+
+
 @pbot.on_message(
     (filters.text | filters.caption)
     & ~filters.bot
@@ -734,6 +863,10 @@ async def teach_user(_, message):
     , group=10
 )
 async def chatbot_handler(_, message: Message):
+
+    if not message.from_user:
+        return
+
     chat_id = message.chat.id
 
     if chat_id not in CHAT_IDS:
@@ -764,8 +897,11 @@ async def chatbot_handler(_, message: Message):
     )
 
     # Remove bot mention from text if present
-    if f"@{pbot.me.username}" in input_text:
-        input_text = input_text.replace(f"@{pbot.me.username}", "").strip()
+    if pbot.me and f"@{pbot.me.username}" in input_text:
+        input_text = input_text.replace(
+            f"@{pbot.me.username}",
+            ""
+        ).strip()
 
     await pbot.send_chat_action(chat_id, enums.ChatAction.TYPING)
     reply = await get_chatbot_reply(
@@ -775,3 +911,5 @@ async def chatbot_handler(_, message: Message):
 
     if reply:
         await message.reply_text(reply)
+
+
