@@ -4,6 +4,7 @@ from pyrogram.types import InlineKeyboardButton as IKB, InlineKeyboardMarkup as 
 from pyrogram.enums import ButtonStyle, ChatMemberStatus
 from AxiomX import pbot, prefix_cmds, font, init_aiohttp_session
 import AxiomX
+from AxiomX.helpers.data.fonts import Fonts
 from AxiomX.helpers.decorator import protected_ids
 from AxiomX.db.chatbot import add_chat, remove_chat, CHAT_IDS
 import config
@@ -12,7 +13,7 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
-LOG_GROUP_ID = -1003976986008
+LOG_GROUP_ID = --1003976986008
 
 
 chat_memory = db["chat_memory"]
@@ -910,6 +911,6 @@ async def chatbot_handler(_, message: Message):
     )
 
     if reply:
-        await message.reply_text(reply)
+        await message.reply_text(Fonts.smallcap(reply))
 
 
