@@ -32,11 +32,11 @@ async def log_action(bot, chat_id: int, category: str, text: str, message_link: 
 
     # Build the log message
     full_log = f"{text}\n\n"
-    full_log += f"<b>Category:</b> <code>{category}</code>\n"
-    full_log += f"<b>Chat ID:</b> <code>{chat_id}</code>"
+    full_log += f"<b>𝐂‌ᴀᴛᴇɢᴏʀʏ:</b> <code>{category}</code>\n"
+    full_log += f"<b>𝐂‌ʜᴀᴛ 𝐈‌ᴅ:</b> <code>{chat_id}</code>"
 
     if message_link:
-        full_log += f"\n<b>Message Link:</b> <a href='{message_link}'>Click here</a>"
+        full_log += f"\n<b>𝐌‌ᴇssᴀɢᴇ 𝐋‌ɪɴᴋ:</b> <a href='{message_link}'>Click here</a>"
 
     # Send the log
     try:
