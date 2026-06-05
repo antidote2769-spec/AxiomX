@@ -50,7 +50,7 @@ async def send_restart(application: Application) -> None:
         await application.bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
-            text="<b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ Sυᴄᴄєssғυʟʟʏ 🚀</b>"
+            text="<b>𝐓‌ʜє 𖤍 ˹ ᴀʀ ꭙ ʙᴏᴛ ˼ 𝐑‌єsᴛᴧꝛᴛєᴅ Sυᴄᴄєssғυʟʟʏ 🚀</b>"
         )
         os.remove("restart_data.txt")  
     except FileNotFoundError:
@@ -61,7 +61,7 @@ async def send_restart(application: Application) -> None:
         if LOGS_CHANNEL:
             await application.bot.send_message(
                 chat_id=LOGS_CHANNEL,
-                text=f"<blockquote><b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐣‌υsᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ ⏱️</b></blockquote>\n\n<blockquote><b>𝐓‌ɪᴍє:</b> <code>{time.ctime()}</code></blockquote>",
+                text=f"<blockquote><b>𝐓‌ʜє 𖤍 ˹ ᴀʀ ꭙ ʙᴏᴛ ˼ 𝐣‌υsᴛ 𝐑‌єsᴛᴧꝛᴛєᴅ ⏱️</b></blockquote>\n\n<blockquote><b>𝐓‌ɪᴍє:</b> <code>{time.ctime()}</code></blockquote>",
                 parse_mode=constants.ParseMode.HTML
             )
     except Exception as e:
@@ -189,7 +189,7 @@ async def initialize_database():
         try:
             await app.bot.send_message(
                 LOGS_CHANNEL,
-                f"<blockquote><b>𝐓‌ʜє 𝐀‌xɪσϻ 𝐌‌ᴧηᴧɢєꝛ 𝐁‌σᴛ 𝐒‌ᴛᴧꝛᴛєᴅ 𝐒‌υᴄᴄєssғυʟʟʏ 🚀</b></blockquote>\n\n"
+                f"<blockquote><b>𝐓‌ʜє 𖤍 ˹ ᴀʀ ꭙ ʙᴏᴛ ˼ 𝐒‌ᴛᴧꝛᴛєᴅ 𝐒‌υᴄᴄєssғυʟʟʏ 🚀</b></blockquote>\n\n"
                 f"<blockquote><b>𝐌‌σᴅυʟєs:</b> <code>ALL</code>\n"
                 f"<b>𝐃‌ᴧᴛᴧʙᴧsє:</b> <code>CONNECTED</code>\n"
                 f"<b>𝐓‌ɪᴍє:</b> <code>{time.ctime()}</code></blockquote>",
