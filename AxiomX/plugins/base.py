@@ -89,7 +89,7 @@ def _gsb(uid):
     au = f"https://t.me/{BOT_UN}?startgroup=true"
     owner_id = getattr(config, "OWNER_ID", 0) or getattr(config, "AXIOM_OWNER_ID", 0)
     owner_url = f"tg://user?id={owner_id}" if owner_id else su
-    owner_button = InlineKeyboardButton(font('σᴡηєꝛ ✧ ᴀxɪσϻ'), url=owner_url, style=ButtonStyle.SUCCESS)
+    owner_button = InlineKeyboardButton(font('σᴡηєꝛ ✧ ᴀʀ'), url=owner_url, style=ButtonStyle.SUCCESS)
     return InlineKeyboardMarkup([[InlineKeyboardButton(font('＋ 𝐈‌ηᴛєɢꝛᴧᴛє 𝐈‌η 𝐘‌συꝛ 𝐂‌ʜᴧᴛ  ＋'), url=au, style=ButtonStyle.SUCCESS)], [InlineKeyboardButton(font('🎧 𝐌‌υsɪᴄ'), url='https://t.me/vcXmnvbot?start=help', style=ButtonStyle.PRIMARY), InlineKeyboardButton(font('⚙ 𝐇‌єʟᴘ ⚙'), callback_data=f'help_{uid}', style=ButtonStyle.DANGER)], [InlineKeyboardButton(font('𝐔‌ᴘᴅᴧᴛєs ⎘'), url=uu, style=ButtonStyle.PRIMARY), InlineKeyboardButton(font('𝐒‌υᴘᴘσꝛᴛ ☏︎'), url=su, style=ButtonStyle.PRIMARY)], [owner_button]])
 
 async def _sp(cid, p, c=None, rm=None, eid=None, rt=None, has_spoiler=None):
