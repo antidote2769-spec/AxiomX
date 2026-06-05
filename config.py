@@ -38,9 +38,9 @@ AXIOM_OWNER_ID = int(getenv("AXIOM_OWNER_ID", "0"))
 # Chat id of a group for logging bot's activities
 LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "0"))
 
-SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/Axlomm")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/antidote_69")
 
-START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/d2l5nj.png")
+START_IMG_URL = getenv("START_IMG_URL", "https://files.catbox.moe/opkx6p.png")
 
 
 SUPPORT_CHAT = getenv('SUPPORT_CHAT', 'Axlomm')
@@ -56,8 +56,8 @@ else:
     LOGS_CHANNEL = None
 
 LOGGER_ID = int(getenv('LOGGER_ID', '0'))
-BOT_USERNAME = getenv('BOT_USERNAME', '@AxiomGcBot')
-BOT_NAME = getenv('BOT_NAME', 'Axiom Manager')
+BOT_USERNAME = getenv('BOT_USERNAME', '@AR_XBOT')
+BOT_NAME = getenv('BOT_NAME', '𖤍 ˹ ᴀʀ ꭙ ʙᴏᴛ ˼')
 IS_WEB_SUP = getenv('IS_WEB_SUP', 'True').lower() == 'true'
 
 SUDO_USERS = [int(x) for x in getenv("SUDO_USERS", "7169279112").split() if x.strip().lstrip("-").isdigit()]
@@ -107,17 +107,17 @@ BTN_ROWS = int(getenv('BTN_ROWS', '6'))
 
 
 # some media source
-PM_START_IMG = getenv('PM_START_IMG', "https://files.catbox.moe/d2l5nj.png")
+PM_START_IMG = getenv('PM_START_IMG', "https://files.catbox.moe/opkx6p.png")
 
-HELP_CMD_IMG = getenv('HELP_CMD_IMG', "https://files.catbox.moe/d2l5nj.png")
-
-
-HELP_MODULE_IMG = getenv('HELP_MODULE_IMG', "https://files.catbox.moe/d2l5nj.png")
-
-START_IMG = getenv('START_IMG', "https://files.catbox.moe/d2l5nj.png")
+HELP_CMD_IMG = getenv('HELP_CMD_IMG', "https://files.catbox.moe/opkx6p.png")
 
 
-FORCE_JOIN_IMG = getenv('FORCE_JOIN_IMG', "https://files.catbox.moe/d2l5nj.png")
+HELP_MODULE_IMG = getenv('HELP_MODULE_IMG', "https://files.catbox.moe/opkx6p.png")
+
+START_IMG = getenv('START_IMG', "https://files.catbox.moe/opkx6p.png")
+
+
+FORCE_JOIN_IMG = getenv('FORCE_JOIN_IMG', "https://files.catbox.moe/opkx6p.png")
 
 AF_START_STICKERS = [
   "CAACAgUAAxkBAAEBrV9nWukpft8gmtrZVMkbO4GKlZy0HQACWxUAAnHv2FZkjr7WjG3OjzYE",
